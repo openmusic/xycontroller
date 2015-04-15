@@ -1,0 +1,26 @@
+{
+  "name": "openmusic-xycontroller",
+  "version": "1.0.0",
+  "description": "A component for plotting (and getting!) X-Y input",
+  "main": "XYController.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openmusic/xycontroller"
+  },
+  "keywords": [
+    "xycontroller",
+    "web",
+    "components",
+    "web",
+    "audio"
+  ],
+  "author": "sole",
+  "license": "Apache 2",
+  "bugs": {
+    "url": "https://github.com/openmusic/xycontroller/issues"
+  },
+  "homepage": "https://github.com/openmusic/xycontroller"
+}

@@ -57,16 +57,101 @@
 
 	
 	proto.attachedCallback = function() {
-		this.startAnimation();
+		this.listenToInput();
+		// this.startAnimation();
 		// TODO perhaps only render on touch
 		// TODO perhaps also debounce that?
+		this.updateDisplay();
 	};
 
 
 	proto.detachedCallback = function() {
-		this.stopAnimation();
+		// this.stopAnimation();
+		this.stopListeningToInput();
 	};
 
+
+	proto.listenToInput = function() {
+
+		var onTouchStart = this.onTouchStart.bind(this);
+		var onTouchEnd = this.onTouchEnd.bind(this);
+
+		this.canvas.addEventListener('touchstart', onTouchStart);
+		this.canvas.addEventListener('mousedown', onTouchStart);
+		this.canvas.addEventListener('touchend', onTouchEnd);
+		this.canvas.addEventListener('mouseup', onTouchEnd);
+
+		this.boundOnTouchStart = onTouchStart;
+		this.boundOnTouchEnd = onTouchEnd;
+
+	};
+
+
+	proto.stopListeningToInput = function() {
+		this.canvas.removeEventListener('touchstart', this.boundOnTouchStart);
+		this.canvas.removeEventListener('mousedown', this.boundOnTouchStart);
+		this.canvas.removeEventListener('touchend', this.boundOnTouchEnd);
+		this.canvas.removeEventListener('mouseup', this.boundOnTouchEnd);
+		document.body.removeEventListener('mouseup', this.boundOnTouchEnd);
+	};
+
+
+	proto.onTouchStart = function(ev) {
+		console.log('touch start', this, ev);
+		var onTouchMove = this.onTouchMove.bind(this);
+		this.canvas.addEventListener('touchmove', onTouchMove);
+		this.canvas.addEventListener('mousemove', onTouchMove);
+		document.body.addEventListener('mouseup', this.boundOnTouchEnd);
+		this.boundOnTouchMove = onTouchMove;
+	};
+
+
+	proto.onTouchMove = function(ev) {
+		var canvasWidth = this.canvas.width;
+		var canvasHeight = this.canvas.height;
+		// TODO: pretty sure this triggers ALL THE REFLOWS
+		// should cache the element position
+		var elPosX = this.canvas.offsetLeft;
+		var elPosY = this.canvas.offsetTop;
+		// ^^^
+		var eventX = ev.layerX - elPosX;
+		var eventY = ev.layerY - elPosY;
+		var relX;
+		var relY;
+
+		if(eventX < 0) {
+			eventX = 0;
+		} else if(eventX > canvasWidth) {
+			eventX = canvasWidth;
+		}
+
+		if(eventY < 0) {
+			eventY = 0;
+		} else if(eventY > canvasHeight) {
+			eventY = canvasHeight;
+		}
+
+		relX = (eventX / canvasWidth - 0.5) * 2;
+		relY = (eventY / canvasHeight - 0.5) * 2;
+
+		this.x = relX;
+		this.y = relY;
+
+		// emit event and...
+		var e = new CustomEvent('input', { detail: { x: relX, y: relY }});
+		this.dispatchEvent(e);
+
+		// Update with the new values!
+		this.updateDisplay();
+		
+	};
+
+
+	proto.onTouchEnd = function(ev) {
+		console.log('end', this, ev);
+		this.canvas.removeEventListener('touchmove', this.boundOnTouchMove);
+		this.canvas.removeEventListener('mousemove', this.boundOnTouchMove);
+	};
 
 	proto.startAnimation = function() {
 
@@ -85,6 +170,11 @@
 
 	proto.stopAnimation = function() {
 		cancelAnimationFrame(this.animationFrameID);
+	};
+
+	proto.updateDisplay = function() {
+		this.resetCanvas();
+		render(this.canvas, this.x, this.y);
 	};
 
 

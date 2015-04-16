@@ -52,6 +52,8 @@ Both `x` and `y` go from `-1` to `1`. Values from outside this range won't be ac
 
 Determines the horizontal value.
 
+Examples:
+
 ```javascript
 <openmusic-xycontroller x="-1"></openmusic-xycontroller> // left
 <openmusic-xycontroller x="0"></openmusic-xycontroller> // center
@@ -61,6 +63,8 @@ Determines the horizontal value.
 #### `y`
 
 Determines the vertical value.
+
+Examples:
 
 ```javascript
 <openmusic-xycontroller y="-1"></openmusic-xycontroller> // bottom

@@ -9,24 +9,29 @@ var ySlider = document.getElementById('ySlider');
 
 xycontroller.addEventListener('input', function(ev) {
 	var detail = ev.detail;
-	xSlider.value = detail.x;
-	ySlider.value = detail.y;
-	
+	var x = detail.x * 1;
+	var y = detail.y * 1;
+	xSlider.value = x;
+	ySlider.value = y;
 	var baseFreq = 220;
 	var freqRange = 880;
-	var relFreq = 0.5 * (detail.x + 1);
+	
+	var relFreq = 0.5 * (x + 1);
+	var relVol = (1 + y) * 0.5;
 
 	osc.frequency.linearRampToValueAtTime(baseFreq + relFreq * freqRange, ac.currentTime);
-	gain.gain.linearRampToValueAtTime(1 - (1 + detail.y) * 0.5, ac.currentTime);
+	gain.gain.linearRampToValueAtTime(relVol, ac.currentTime);
 });
 
 
-xycontroller.setAttribute('x', 0);
-xycontroller.setAttribute('y', -0.25);
 osc.connect(gain);
 gain.connect(ac.destination);
-gain.gain.setValueAtTime(0.25, ac.currentTime);
 osc.start();
+
+
+xycontroller.setAttribute('x', 0);
+xycontroller.setAttribute('y', -0.95);
+
 
 //
 

@@ -18,7 +18,7 @@
 
 		// Tip: the additional + 0.5 is for getting a sharp line instead of a blurry one
 		var canvasX = 0.5 * (1 + x) * canvasWidth + 0.5;
-		var canvasY = 0.5 * (1 + y) * canvasHeight + 0.5;
+		var canvasY = canvasHeight - 0.5 * (1 + y) * canvasHeight + 0.5;
 
 		ctx.lineWidth = 1;
 		ctx.strokeStyle = 'rgb(0, 255, 0)';
@@ -102,7 +102,9 @@
 	proto.attributeChangedCallback = function(attr, oldValue, newValue, namespace) {
 		
 		this.setValue(attr, newValue);
-		// TODO: do we want to dispatch an event if oldValue != newValue?
+		// TODO: this is not exactly the right type of event I guess
+		var e = new CustomEvent('input', { detail: { x: this.values.x, y: this.values.y } });
+		this.dispatchEvent(e);
 		
 	};
 
@@ -176,10 +178,8 @@
 		}
 
 		relX = (eventX / canvasWidth - 0.5) * 2;
-		relY = (eventY / canvasHeight - 0.5) * 2;
+		relY = - (eventY / canvasHeight - 0.5) * 2;
 
-		//this.x = relX;
-		//this.y = relY;
 		this.setValue('x', relX);
 		this.setValue('y', relY);
 

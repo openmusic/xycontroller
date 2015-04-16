@@ -75,22 +75,25 @@
 
 		var onTouchStart = this.onTouchStart.bind(this);
 		var onTouchEnd = this.onTouchEnd.bind(this);
+		var onTouchMove = this.onTouchMove.bind(this);
 
-		this.canvas.addEventListener('touchstart', onTouchStart);
+		// this.canvas.addEventListener('touchstart', onTouchStart);
 		this.canvas.addEventListener('mousedown', onTouchStart);
-		this.canvas.addEventListener('touchend', onTouchEnd);
+		this.canvas.addEventListener('touchmove', onTouchMove);
+		//this.canvas.addEventListener('touchend', onTouchEnd);
 		this.canvas.addEventListener('mouseup', onTouchEnd);
 
 		this.boundOnTouchStart = onTouchStart;
 		this.boundOnTouchEnd = onTouchEnd;
+		this.boundOnTouchMove = onTouchMove;
 
 	};
 
 
 	proto.stopListeningToInput = function() {
-		this.canvas.removeEventListener('touchstart', this.boundOnTouchStart);
+		//this.canvas.removeEventListener('touchstart', this.boundOnTouchStart);
 		this.canvas.removeEventListener('mousedown', this.boundOnTouchStart);
-		this.canvas.removeEventListener('touchend', this.boundOnTouchEnd);
+		//this.canvas.removeEventListener('touchend', this.boundOnTouchEnd);
 		this.canvas.removeEventListener('mouseup', this.boundOnTouchEnd);
 		document.body.removeEventListener('mouseup', this.boundOnTouchEnd);
 	};
@@ -98,11 +101,11 @@
 
 	proto.onTouchStart = function(ev) {
 		console.log('touch start', this, ev);
-		var onTouchMove = this.onTouchMove.bind(this);
-		this.canvas.addEventListener('touchmove', onTouchMove);
+		var onTouchMove = this.boundOnTouchMove;
+		//this.canvas.addEventListener('touchmove', onTouchMove);
 		this.canvas.addEventListener('mousemove', onTouchMove);
 		document.body.addEventListener('mouseup', this.boundOnTouchEnd);
-		this.boundOnTouchMove = onTouchMove;
+		//this.boundOnTouchMove = onTouchMove;
 	};
 
 
@@ -114,8 +117,19 @@
 		var elPosX = this.canvas.offsetLeft;
 		var elPosY = this.canvas.offsetTop;
 		// ^^^
-		var eventX = ev.layerX - elPosX;
-		var eventY = ev.layerY - elPosY;
+		var eventX;
+		var eventY;
+
+		if(ev.touches) {
+			var touches = ev.touches;
+			var touch = touches[0];
+			eventX = touch.clientX - elPosX;
+			eventY = touch.clientY - elPosY;
+		} else {
+			eventX = ev.layerX - elPosX;
+			eventY = ev.layerY - elPosY;
+		}
+		
 		var relX;
 		var relY;
 

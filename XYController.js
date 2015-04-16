@@ -80,6 +80,7 @@
 
 	
 	proto.setValue = function(name, value) {
+		// TODO clamp to -1, 1
 		if(value !== undefined && value !== null) {
 			this.values[name] = value;
 		} /*

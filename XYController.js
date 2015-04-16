@@ -58,15 +58,11 @@
 	
 	proto.attachedCallback = function() {
 		this.listenToInput();
-		// this.startAnimation();
-		// TODO perhaps only render on touch
-		// TODO perhaps also debounce that?
 		this.updateDisplay();
 	};
 
 
 	proto.detachedCallback = function() {
-		// this.stopAnimation();
 		this.stopListeningToInput();
 	};
 
@@ -77,11 +73,9 @@
 		var onTouchEnd = this.onTouchEnd.bind(this);
 		var onTouchMove = this.onTouchMove.bind(this);
 
-		// this.canvas.addEventListener('touchstart', onTouchStart);
 		this.canvas.addEventListener('mousedown', onTouchStart);
-		this.canvas.addEventListener('touchmove', onTouchMove);
-		//this.canvas.addEventListener('touchend', onTouchEnd);
 		this.canvas.addEventListener('mouseup', onTouchEnd);
+		this.canvas.addEventListener('touchmove', onTouchMove);
 
 		this.boundOnTouchStart = onTouchStart;
 		this.boundOnTouchEnd = onTouchEnd;
@@ -91,21 +85,17 @@
 
 
 	proto.stopListeningToInput = function() {
-		//this.canvas.removeEventListener('touchstart', this.boundOnTouchStart);
 		this.canvas.removeEventListener('mousedown', this.boundOnTouchStart);
-		//this.canvas.removeEventListener('touchend', this.boundOnTouchEnd);
 		this.canvas.removeEventListener('mouseup', this.boundOnTouchEnd);
 		document.body.removeEventListener('mouseup', this.boundOnTouchEnd);
+		this.canvas.removeEventListener('touchmove', this.boundOnTouchMove);
 	};
 
 
 	proto.onTouchStart = function(ev) {
-		console.log('touch start', this, ev);
 		var onTouchMove = this.boundOnTouchMove;
-		//this.canvas.addEventListener('touchmove', onTouchMove);
 		this.canvas.addEventListener('mousemove', onTouchMove);
 		document.body.addEventListener('mouseup', this.boundOnTouchEnd);
-		//this.boundOnTouchMove = onTouchMove;
 	};
 
 
@@ -162,30 +152,11 @@
 
 
 	proto.onTouchEnd = function(ev) {
-		console.log('end', this, ev);
 		this.canvas.removeEventListener('touchmove', this.boundOnTouchMove);
 		this.canvas.removeEventListener('mousemove', this.boundOnTouchMove);
 	};
 
-	proto.startAnimation = function() {
-
-		var that = this;
-
-		animate();
-
-		function animate() {
-			that.animationFrameID = requestAnimationFrame(animate);
-		
-			that.resetCanvas();
-			render(that.canvas, that.x, that.y);
-		}
-	};
-
-
-	proto.stopAnimation = function() {
-		cancelAnimationFrame(this.animationFrameID);
-	};
-
+	
 	proto.updateDisplay = function() {
 		this.resetCanvas();
 		render(this.canvas, this.x, this.y);

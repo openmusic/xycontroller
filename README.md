@@ -42,6 +42,8 @@ Up to you.
 
 ## Usage
 
+Have a look at `demo/demo.js` for an example that uses this component to control the volume and pitch of an oscillator in order to build a very simple theremin-like instrument.
+
 ### Attributes
 
 Both `x` and `y` go from `-1` to `1`. Values from outside this range won't be accepted and will be automatically clamped.
@@ -74,6 +76,8 @@ This event will be dispatched as the value changes due to user input. To listen 
 
 ```javascript
 controller.addEventListener('input', function(ev) {
-	
+	var detail = ev.detail;
+	// detail.x and detail.y contain the values you want
+	console.log(detail.x, detail.y);
 });
 ```

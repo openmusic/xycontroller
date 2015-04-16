@@ -39,14 +39,17 @@
 
 	
 	proto.createdCallback = function() {
+		
+		this.values = { x: 0, y: 0 };
+
 		// making web components MWC framework proof.
 		this.innerHTML = '';
 		
 		var canvas = document.createElement('canvas');
 		canvas.width = defaultWidth;
 		canvas.height = defaultHeight;
-		this.x = 0;
-		this.y = 0;
+		//this.x = 0;
+		//this.y = 0;
 		this.canvas = canvas;
 		this.context = canvas.getContext('2d');
 		this.appendChild(canvas);
@@ -57,6 +60,7 @@
 
 	
 	proto.attachedCallback = function() {
+		this.readAttributes();
 		this.listenToInput();
 		this.updateDisplay();
 	};
@@ -64,6 +68,41 @@
 
 	proto.detachedCallback = function() {
 		this.stopListeningToInput();
+	};
+
+
+	proto.readAttributes = function() {
+		var that = this;
+		['x', 'y'].forEach(function(attr) {
+			that.setValue(attr, that.getAttribute(attr));		
+		});
+	};
+
+	
+	proto.setValue = function(name, value) {
+		if(value !== undefined && value !== null) {
+			this.values[name] = value;
+		} /*
+		// TODO: perhaps it doesn't make sense to delete the internal value ;-)
+		 else {
+			if(this.values[name]) {
+				delete(this.values[name]);
+			}
+		}*/
+		this.updateDisplay();
+	};
+
+
+	proto.getValue = function(name) {
+		return this.values[name];
+	};
+
+	
+	proto.attributeChangedCallback = function(attr, oldValue, newValue, namespace) {
+		
+		this.setValue(attr, newValue);
+		// TODO: do we want to dispatch an event if oldValue != newValue?
+		
 	};
 
 
@@ -138,8 +177,10 @@
 		relX = (eventX / canvasWidth - 0.5) * 2;
 		relY = (eventY / canvasHeight - 0.5) * 2;
 
-		this.x = relX;
-		this.y = relY;
+		//this.x = relX;
+		//this.y = relY;
+		this.setValue('x', relX);
+		this.setValue('y', relY);
 
 		// emit event and...
 		var e = new CustomEvent('input', { detail: { x: relX, y: relY }});
@@ -159,7 +200,7 @@
 	
 	proto.updateDisplay = function() {
 		this.resetCanvas();
-		render(this.canvas, this.x, this.y);
+		render(this.canvas, this.getValue('x') * 1, this.getValue('y') * 1);
 	};
 
 

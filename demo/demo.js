@@ -20,3 +20,12 @@ setTimeout(function() {
 	xycontroller.parentNode.removeChild(xycontroller);
 }, 1000);
 */
+
+/*
+// Testing attribute setting
+setTimeout(function() {
+	xycontroller.setAttribute('x', 0.5);
+	xycontroller.setAttribute('x', -0.5);
+	xycontroller.removeAttribute('x');
+}, 1000);
+*/

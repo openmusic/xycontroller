@@ -142,6 +142,9 @@
 		var e = new CustomEvent('touchstart');
 		this.dispatchEvent(e);
 
+		// TODO is this a good idea? but it seems to get the job done?
+		// AKA: process the position of the touch when user interaction starts
+		this.onTouchMove(ev);
 	};
 
 

@@ -1,6 +1,6 @@
 {
   "name": "openmusic-xycontroller",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A component for plotting (and getting!) X-Y input",
   "main": "XYController.js",
   "scripts": {

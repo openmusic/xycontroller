@@ -42,7 +42,7 @@
 		
 		this.values = { x: 0, y: 0 };
 
-		// making web components MWC framework proof.
+		// making web components MVC framework proof.
 		this.innerHTML = '';
 		
 		var canvas = document.createElement('canvas');
@@ -138,6 +138,10 @@
 		var onTouchMove = this.boundOnTouchMove;
 		this.canvas.addEventListener('mousemove', onTouchMove);
 		document.body.addEventListener('mouseup', this.boundOnTouchEnd);
+
+		var e = new CustomEvent('touchstart');
+		this.dispatchEvent(e);
+
 	};
 
 
@@ -196,6 +200,9 @@
 	proto.onTouchEnd = function(ev) {
 		this.canvas.removeEventListener('touchmove', this.boundOnTouchMove);
 		this.canvas.removeEventListener('mousemove', this.boundOnTouchMove);
+
+		var e = new CustomEvent('touchend');
+		this.dispatchEvent(e);
 	};
 
 	
@@ -232,4 +239,3 @@
 	}
 
 }).call(this);
-

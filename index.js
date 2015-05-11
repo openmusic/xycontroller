@@ -1,4 +1,6 @@
 (function() {
+	var safeRegisterElement = require('safe-register-element');
+
 	var proto = Object.create(HTMLElement.prototype);
 
 	var defaultWidth = 200;
@@ -228,9 +230,7 @@
 	var component = {};
 	component.prototype = proto;
 	component.register = function(name) {
-		document.registerElement(name, {
-			prototype: proto
-		});
+		safeRegisterElement(name, proto);
 	};
 
 	if(typeof define === 'function' && define.amd) {

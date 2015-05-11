@@ -1,11 +1,11 @@
+require('../').register('openmusic-xycontroller');
+
 var ac = new AudioContext();
 var osc = ac.createOscillator();
 var gain = ac.createGain();
 var xycontroller = document.querySelector('openmusic-xycontroller');
 var xSlider = document.getElementById('xSlider');
 var ySlider = document.getElementById('ySlider');
-
-
 
 xycontroller.addEventListener('input', function(ev) {
 	var detail = ev.detail;

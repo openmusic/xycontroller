@@ -1,3 +1,4 @@
+require('webcomponents-lite');
 require('../').register('openmusic-xycontroller');
 
 var ac = new AudioContext();

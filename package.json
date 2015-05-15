@@ -1,6 +1,6 @@
 {
   "name": "openmusic-xycontroller",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A component for plotting (and getting!) X-Y input",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,8 @@
   "homepage": "https://github.com/openmusic/xycontroller",
   "devDependencies": {
     "gulp": "^3.8.11",
-    "openmusic-demo-gulp-tasks": "^1.5.1"
+    "openmusic-demo-gulp-tasks": "^1.5.1",
+    "webcomponents-lite": "^0.6.0"
   },
   "dependencies": {
     "safe-register-element": "^1.0.1"

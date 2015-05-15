@@ -42,7 +42,7 @@
 	
 	proto.createdCallback = function() {
 		
-		this.values = { x: 0, y: 0 };
+		this.values = { x: 0, y: 0, xpos: 0, ypos: 0 };
 
 		// making web components MVC framework proof.
 		this.innerHTML = '';
@@ -56,8 +56,15 @@
 		this.context = canvas.getContext('2d');
 		this.appendChild(canvas);
 
+		this._readElementPosition();	
+
 		this.resetCanvas(this.context);
 
+	};
+
+	proto._readElementPosition = function() {
+		this.values.xpos = this.canvas.offsetLeft;
+		this.values.ypos = this.canvas.offsetTop;
 	};
 
 	
@@ -153,11 +160,12 @@
 	proto.onTouchMove = function(ev) {
 		var canvasWidth = this.canvas.width;
 		var canvasHeight = this.canvas.height;
-		// TODO: pretty sure this triggers ALL THE REFLOWS
-		// should cache the element position
-		var elPosX = this.canvas.offsetLeft;
-		var elPosY = this.canvas.offsetTop;
-		// ^^^
+		
+		// Using cached element positions, if you haved moved it since it
+		// was attached to the DOM you will need to call the _readElementPosition
+		// method again
+		var elPosX = this.values.xpos;
+		var elPosY = this.values.ypos;
 		var eventX;
 		var eventY;
 
